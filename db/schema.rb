@@ -11,133 +11,127 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160528192734) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20160528190929) do
 
   create_table "comments", force: :cascade do |t|
-    t.string   "text",                          null: false
-    t.boolean  "resolved",      default: false, null: false
-    t.integer  "user_id",                       null: false
-    t.integer  "spec_id",                       null: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.string   "ancestry"
-    t.integer  "updated_by_id"
+    t.string   "text",          limit: 255,                 null: false
+    t.boolean  "resolved",                  default: false, null: false
+    t.integer  "user_id",       limit: 4,                   null: false
+    t.integer  "spec_id",       limit: 4,                   null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.string   "ancestry",      limit: 255
+    t.integer  "updated_by_id", limit: 4
   end
 
   add_index "comments", ["ancestry"], name: "index_comments_on_ancestry", using: :btree
 
   create_table "organizations", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "role_id"
-    t.string   "domain"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",       limit: 255
+    t.integer  "role_id",    limit: 4
+    t.string   "domain",     limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "projects", force: :cascade do |t|
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.string   "name"
-    t.integer  "created_by_id"
-    t.integer  "organization_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "name",          limit: 255
+    t.integer  "created_by_id", limit: 4
   end
 
   create_table "requests", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.integer  "role_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "user_id",    limit: 4, null: false
+    t.integer  "role_id",    limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   create_table "roles", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "spec_types", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "specs", force: :cascade do |t|
-    t.string   "description",                  null: false
-    t.integer  "spec_type_id"
-    t.integer  "project_id"
-    t.string   "ancestry"
+    t.string   "description",  limit: 255,                 null: false
+    t.integer  "spec_type_id", limit: 4
+    t.integer  "project_id",   limit: 4
+    t.string   "ancestry",     limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "bookmarked",   default: false, null: false
-    t.integer  "spec_order"
+    t.boolean  "bookmarked",               default: false, null: false
+    t.integer  "spec_order",   limit: 4
   end
 
   add_index "specs", ["ancestry"], name: "index_specs_on_ancestry", using: :btree
   add_index "specs", ["project_id"], name: "project_id_ix", using: :btree
 
   create_table "tag_type_groups", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "name"
-    t.string   "color"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "name",       limit: 255
+    t.string   "color",      limit: 255
   end
 
   create_table "tag_types", force: :cascade do |t|
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.string   "name"
-    t.string   "color"
-    t.integer  "organization_id"
-    t.integer  "created_by_id"
-    t.integer  "tag_type_group_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "name",              limit: 255
+    t.string   "color",             limit: 255
+    t.integer  "tag_type_group_id", limit: 4
     t.time     "deleted_at"
-    t.integer  "deleted_by_id"
+    t.integer  "deleted_by_id",     limit: 4
   end
 
   create_table "tags", force: :cascade do |t|
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.integer  "spec_id"
-    t.integer  "tag_type_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "spec_id",       limit: 4
+    t.integer  "tag_type_id",   limit: 4
     t.time     "deleted_at"
-    t.integer  "deleted_by_id"
+    t.integer  "deleted_by_id", limit: 4
   end
 
   add_index "tags", ["spec_id"], name: "spec_id_ix", using: :btree
 
   create_table "tickets", force: :cascade do |t|
-    t.string   "name",          null: false
-    t.integer  "spec_id",       null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.string   "tracker_id"
+    t.string   "name",          limit: 255, null: false
+    t.integer  "spec_id",       limit: 4,   null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.time     "deleted_at"
-    t.integer  "deleted_by_id"
+    t.integer  "deleted_by_id", limit: 4
+    t.string   "tracker_id",    limit: 255
   end
 
   add_index "tickets", ["spec_id"], name: "ticket_id_ix", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.inet     "current_sign_in_ip"
-    t.inet     "last_sign_in_ip"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.integer  "role_id"
-    t.string   "provider"
-    t.string   "uid"
-    t.string   "name"
-    t.integer  "organization_id"
+    t.integer  "current_sign_in_ip",     limit: 4
+    t.integer  "last_sign_in_ip",        limit: 4
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+    t.integer  "role_id",                limit: 4
+    t.string   "provider",               limit: 255
+    t.string   "uid",                    limit: 255
+    t.string   "name",                   limit: 255
+    t.integer  "organization_id",        limit: 4
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
